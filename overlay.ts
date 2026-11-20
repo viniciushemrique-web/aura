@@ -38,7 +38,7 @@ export function iniciarOverlay(idIlha = "dynamicIsland"): void {
       if (!visivel || !ilha) return;
 
       const [cursor, pos, escala] = await Promise.all([
-        janela.cursorPosition(), janela.outerPosition(), janela.scaleFactor(),
+        cursorPosition(), janela.outerPosition(), janela.scaleFactor(),
       ]);
       const r = ilha.getBoundingClientRect();
       const grande = ilha.classList.contains("is-large");
