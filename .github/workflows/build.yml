@@ -10,6 +10,23 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Organizar estrutura (caso o upload tenha achatado as pastas)
+        shell: pwsh
+        run: |
+          function Mover($nome, $destino) {
+            if ((Test-Path $nome) -and -not (Test-Path (Join-Path $destino $nome))) {
+              New-Item -ItemType Directory -Force -Path $destino | Out-Null
+              Move-Item $nome (Join-Path $destino $nome)
+            }
+          }
+          'Cargo.toml','build.rs','tauri.conf.json' | ForEach-Object { Mover $_ 'src-tauri' }
+          Mover 'default.json' 'src-tauri/capabilities'
+          'lib.rs','main.rs' | ForEach-Object { Mover $_ 'src-tauri/src' }
+          'config.ts','estado.ts','voz.ts','saude.ts','acoes.ts','spotify.ts','ia.ts','reconhecimento.ts','orquestrador.ts','overlay.ts' | ForEach-Object { Mover $_ 'src/core' }
+          Mover 'main.ts' 'src'
+          Get-ChildItem -Recurse -File -Exclude node_modules | Where-Object { $_.FullName -notmatch 'node_modules|\.git\\' } | ForEach-Object { $_.FullName }
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
