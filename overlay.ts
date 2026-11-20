@@ -4,7 +4,7 @@
  * tauri.conf.json; aqui só alternamos setIgnoreCursorEvents conforme o cursor.
  */
 import { invoke } from "@tauri-apps/api/core";
-import { getCurrentWindow } from "@tauri-apps/api/window";
+import { cursorPosition, getCurrentWindow } from "@tauri-apps/api/window";
 import { ESTADO } from "./estado";
 
 export function iniciarOverlay(idIlha = "dynamicIsland"): void {
